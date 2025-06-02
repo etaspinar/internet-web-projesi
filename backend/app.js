@@ -38,6 +38,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Uploads klasörü için statik dosya sunucusu
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// --- YORUM ROUTE EKLEME ---
+app.use('/api/comments', require('./routes/comments'));
+
 // CSRF token endpoint'i
 app.get('/api/csrf-token', (req, res) => {
   // Daha güvenli bir token oluştur (crypto kütüphanesi ile)

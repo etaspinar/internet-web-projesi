@@ -149,9 +149,12 @@ const Home = () => {
           return dateB - dateA;
         });
 
-        if (sortedPosts.length > 0) {
+        if (sortedPosts.length > 1) {
           setFeaturedPost(sortedPosts[0]);
           setPosts(sortedPosts.slice(1));
+        } else if (sortedPosts.length === 1) {
+          setFeaturedPost(sortedPosts[0]);
+          setPosts([sortedPosts[0]]);
         } else {
           setPosts([]);
           setFeaturedPost(null);

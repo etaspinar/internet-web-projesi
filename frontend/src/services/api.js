@@ -230,6 +230,13 @@ export const deleteMedia = (id) => {
   return api.delete(`/media/${id}`);
 };
 
+// --- YORUM FONKSİYONLARI ---
+export const getComments = (postId) => api.get(`/comments/${postId}`);
+export const addComment = (postId, content, token) =>
+  api.post(`/comments/${postId}`, { content }, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
 // Kullanıcı işlemleri için API fonksiyonları
 export const createUser = (userData) => {
   return api.post('/users', userData);
@@ -385,6 +392,26 @@ export const getSitemap = () => {
     },
     responseType: 'text'
   });
+};
+
+// Kullanıcı kendi profilini getirir
+export const getMyProfile = async () => {
+  return api.get('/users/profile');
+};
+
+// Kullanıcı kendi profilini günceller
+export const updateMyProfile = async (data) => {
+  return api.put('/users/profile', data);
+};
+
+// Kullanıcı şifresini değiştirir
+export const changeMyPassword = async (oldPassword, newPassword) => {
+  return api.post('/users/change-password', { oldPassword, newPassword });
+};
+
+// Kullanıcı yorumunu günceller
+export const updateComment = async (commentId, content) => {
+  return api.put(`/users/comments/${commentId}`, { content });
 };
 
 export default api;

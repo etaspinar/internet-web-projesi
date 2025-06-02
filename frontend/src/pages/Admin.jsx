@@ -329,7 +329,7 @@ const Admin = () => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Evet, sil!',
+      confirmButtonText: 'Sil!',
       cancelButtonText: 'İptal'
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -371,7 +371,7 @@ const Admin = () => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Evet, sil!',
+      confirmButtonText: 'Sil!',
       cancelButtonText: 'İptal'
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -549,7 +549,7 @@ const Admin = () => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Evet, sil!',
+      confirmButtonText: 'Sil!',
       cancelButtonText: 'İptal'
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -591,7 +591,7 @@ const Admin = () => {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Evet, sil!',
+      confirmButtonText: 'Sil!',
       cancelButtonText: 'İptal'
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -958,12 +958,6 @@ const Admin = () => {
                   onClick={() => handleTabChange('media')}
                 >
                   <i className="fa-solid fa-images me-2"></i> Medya
-                </button>
-                <button 
-                  className={`list-group-item list-group-item-action ${activeTab === 'settings' ? 'active' : ''}`}
-                  onClick={() => handleTabChange('settings')}
-                >
-                  <i className="fa-solid fa-gear me-2"></i> Ayarlar
                 </button>
               </div>
             </div>

@@ -118,20 +118,12 @@ const Footer = () => {
               Teknoloji dünyasındaki en güncel gelişmeleri ve haberleri sizlere sunuyoruz. Her gün yenilenen içeriklerimizle teknoloji dünyasından haberdar olun.
             </p>
             <div className="social-icons d-flex mb-4">
-              <a href="#" aria-label="Facebook">
-                <i className="fa-brands fa-facebook-f"></i>
-              </a>
-              <a href="#" aria-label="Twitter">
-                <i className="fa-brands fa-twitter"></i>
-              </a>
-              <a href="#" aria-label="Instagram">
+              
+              <a href="https://www.instagram.com/enestaspinar922/" aria-label="Instagram">
                 <i className="fa-brands fa-instagram"></i>
               </a>
-              <a href="#" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/enestaspinar/" aria-label="LinkedIn">
                 <i className="fa-brands fa-linkedin-in"></i>
-              </a>
-              <a href="#" aria-label="YouTube">
-                <i className="fa-brands fa-youtube"></i>
               </a>
             </div>
           </div>
@@ -149,11 +141,11 @@ const Footer = () => {
           <div className="col-md-6 col-lg-3 mb-4">
             <h5 className="text-uppercase mb-4">Kategoriler</h5>
             <ul className="list-unstyled">
-              <li className="mb-2"><a href="#" className="text-white text-decoration-none">Yazılım</a></li>
-              <li className="mb-2"><a href="#" className="text-white text-decoration-none">Donanım</a></li>
-              <li className="mb-2"><a href="#" className="text-white text-decoration-none">Mobil</a></li>
-              <li className="mb-2"><a href="#" className="text-white text-decoration-none">Oyun</a></li>
-              <li><a href="#" className="text-white text-decoration-none">Diğer</a></li>
+              <li className="mb-2"><a href="/kategori/siber-guvenlik" className="text-white text-decoration-none">Siber Güvenlik</a></li>
+              <li className="mb-2"><a href="/kategori/donanim" className="text-white text-decoration-none">Donanım</a></li>
+              <li className="mb-2"><a href="/kategori/mobil" className="text-white text-decoration-none">Mobil</a></li>
+              <li className="mb-2"><a href="/kategori/yapay-zeka" className="text-white text-decoration-none">Yapay Zeka</a></li>
+              <li className="mb-2"><a href="/kategoriler" className="text-white text-decoration-none">Tüm Kategoriler</a></li>
             </ul>
           </div>
           

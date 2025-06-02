@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPostBySlug, getRelatedPosts } from '../services/api';
+import { getPostBySlug, getRelatedPosts, getComments, addComment } from '../services/api';
 
 const PostDetail = () => {
   const params = useParams();
@@ -286,8 +286,76 @@ const PostDetail = () => {
           </div>
         </div>
       </div>
-    </div>
+    {/* --- YORUMLAR BÖLÜMÜ --- */}
+    <CommentsSection postId={post?._id} />
+  </div>
   );
 };
+
+// --- YORUM BİLEŞENİ ---
+
+function CommentsSection({ postId }) {
+  const [comments, setComments] = useState([]);
+  const [content, setContent] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+    if (!postId) return;
+    setLoading(true);
+    getComments(postId)
+      .then(res => setComments(res.data.data))
+      .catch(() => setComments([]))
+      .finally(() => setLoading(false));
+  }, [postId]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return;
+    try {
+      const token = user?.token;
+      const res = await addComment(postId, content, token);
+      setComments([res.data.data, ...comments]);
+      setContent('');
+    } catch (err) {
+      setError('Yorum eklenemedi. Giriş yapmış olduğunuzdan emin olun.');
+    }
+  };
+
+  return (
+    <div className="mt-5">
+      <h4>Yorumlar</h4>
+      {user ? (
+        <form onSubmit={handleSubmit} className="mb-3">
+          <textarea
+            className="form-control mb-2"
+            value={content}
+            onChange={e => setContent(e.target.value)}
+            placeholder="Yorumunuzu yazın..."
+            required
+            rows={3}
+          />
+          <button type="submit" className="btn btn-primary">Yorum Yap</button>
+        </form>
+      ) : (
+        <div className="alert alert-info">Yorum yapmak için giriş yapmalısınız.</div>
+      )}
+      {loading ? <div>Yorumlar yükleniyor...</div> : (
+        comments.length > 0 ? (
+          <ul className="list-group">
+            {comments.map(c => (
+              <li key={c._id} className="list-group-item">
+                <strong>{c.user?.name || c.user?.username || c.user?.fullName || 'Kullanıcı'}:</strong> {c.content}
+                <span className="text-muted float-end" style={{ fontSize: '0.85em' }}>{new Date(c.createdAt).toLocaleString('tr-TR')}</span>
+              </li>
+            ))}
+          </ul>
+        ) : <div>Henüz yorum yok.</div>
+      )}
+      {error && <div className="alert alert-danger mt-2">{error}</div>}
+    </div>
+  );
+}
 
 export default PostDetail;

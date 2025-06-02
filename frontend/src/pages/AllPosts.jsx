@@ -237,7 +237,13 @@ const AllPosts = () => {
                       <div className="post-card-image">
                         <Link to={`/haber/${post.slug || generateSlug(post.title)}`}>
                           <img 
-                            src={post.imageUrl || '/placeholder-image.jpg'} 
+                            src={
+                              post.imageUrl
+                                ? (post.imageUrl.startsWith('/') ? `http://localhost:5001${post.imageUrl}` : post.imageUrl)
+                                : post.image
+                                  ? (post.image.startsWith('/') ? `http://localhost:5001${post.image}` : post.image)
+                                  : '/placeholder-image.jpg'
+                            }
                             alt={post.title || 'İçerik'} 
                             className="img-fluid rounded" 
                           />
