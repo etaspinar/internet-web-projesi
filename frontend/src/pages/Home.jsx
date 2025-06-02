@@ -111,6 +111,13 @@ const Home = () => {
         setLoading(true);
         setError(null);
 
+        // En son postu çek
+        let latestPost = null;
+        try {
+          const latestRes = await fetch('/api/posts/latest');
+          if (latestRes.ok) latestPost = await latestRes.json();
+        } catch (e) { /* ignore */ }
+
         // Tüm verileri paralel olarak çek
         const [postsResponse, categoriesResponse, galleryResponse] = await Promise.all([
           getPosts(),
@@ -142,23 +149,23 @@ const Home = () => {
           return post;
         });
 
-        // Tarihe göre sırala
-        const sortedPosts = [...postsData].sort((a, b) => {
-          const dateA = new Date(a.createdAt || a.created_at || a.date || 0);
-          const dateB = new Date(b.createdAt || b.created_at || b.date || 0);
-          return dateB - dateA;
-        });
-
-        if (sortedPosts.length > 1) {
-          setFeaturedPost(sortedPosts[0]);
-          setPosts(sortedPosts.slice(1));
-        } else if (sortedPosts.length === 1) {
-          setFeaturedPost(sortedPosts[0]);
-          setPosts([sortedPosts[0]]);
+        // Son postu featured olarak ayarla, listeden çıkar
+        let featured = latestPost;
+        let restPosts = postsData;
+        if (featured) {
+          restPosts = postsData.filter(p => p._id !== featured._id);
         } else {
-          setPosts([]);
-          setFeaturedPost(null);
+          // Fallback: eski mantık
+          const sortedPosts = [...postsData].sort((a, b) => {
+            const dateA = new Date(a.createdAt || a.created_at || a.date || 0);
+            const dateB = new Date(b.createdAt || b.created_at || b.date || 0);
+            return dateB - dateA;
+          });
+          featured = sortedPosts[0] || null;
+          restPosts = sortedPosts.slice(1);
         }
+        setFeaturedPost(featured);
+        setPosts(restPosts);
 
         // Kategorileri işle
         let categoriesData = [];
