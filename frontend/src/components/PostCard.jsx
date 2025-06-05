@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const PostCard = ({ post, compact = false, featured = false }) => {
-  // Eğer post veya post.category undefined ise iskelet görünümü göster
   if (!post) {
     return (
       <div className="card h-100 post-card skeleton-card">
@@ -24,7 +23,6 @@ const PostCard = ({ post, compact = false, featured = false }) => {
     );
   }
 
-  // Kompakt görünüm için (küçük kartlar)
   if (compact) {
     return (
       <div className="card h-100 post-card post-card-compact post-card-hover">
@@ -70,7 +68,6 @@ const PostCard = ({ post, compact = false, featured = false }) => {
     );
   }
   
-  // Öne çıkan görünüm için (büyük kartlar)
   if (featured) {
     return (
       <div className="card h-100 post-card featured-post-card post-card-hover">
@@ -125,7 +122,6 @@ const PostCard = ({ post, compact = false, featured = false }) => {
     );
   }
 
-  // Standart görünüm
   return (
     <div className="card h-100 post-card post-card-hover">
       <div className="position-relative overflow-hidden" style={{ height: '200px' }}>

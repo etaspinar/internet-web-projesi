@@ -178,7 +178,7 @@ const Admin = () => {
           }
           
           // Toplam ziyaret sayısını 9 olarak ayarla (alttaki ziyaretçi sayısıyla uyumlu olması için)
-          totalVisitsCount = 9;
+          totalVisitsCount = statsData.totalVisits || 9;
         }
       }
       
@@ -251,7 +251,7 @@ const Admin = () => {
       setLoadingData(true);
       setError('');
       
-      // Kategori ekleme işlemi için CSRF token al (güncelleme işleminde gerekli değil)
+      // Kategori ekleme işlemi için CSRF token al 
       if (!newCategory._id) {
         console.log('Yeni kategori ekleme işlemi için CSRF token alınıyor...');
         const csrfResult = await getCsrfToken();
@@ -749,19 +749,7 @@ const Admin = () => {
           </div>
           
           <div className="col-md-3 mb-4">
-            <div className="card border-0 shadow-sm h-100">
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 className="text-muted mb-1">Toplam Ziyaret</h6>
-                    <h3 className="mb-0">{stats.totalVisits}</h3>
-                  </div>
-                  <div className="icon-circle bg-warning text-white">
-                    <i className="fa-solid fa-chart-line"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
         

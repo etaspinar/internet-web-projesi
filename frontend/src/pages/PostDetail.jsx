@@ -16,7 +16,6 @@ const PostDetail = () => {
         setLoading(true);
         setError(null);
         
-        // Slug kontrolü
         if (!slug || slug.trim() === '') {
           throw new Error('Geçersiz haber URL\'si');
         }
@@ -25,11 +24,9 @@ const PostDetail = () => {
         const response = await getPostBySlug(slug);
         console.log('Haber API yanıtı:', response);
         
-        // API yanıtını işle
         let postData = null;
         
         if (response && response.data) {
-          // Başarılı API yanıtı ise, esas veri response.data.data içindedir
           if (response.data.success && response.data.data) {
             postData = response.data.data;
           } else if (typeof response.data === 'object' && !Array.isArray(response.data)) {
@@ -38,8 +35,7 @@ const PostDetail = () => {
             postData = response.data[0];
           }
         }
-        
-        // Konsola tüm veriyi yazdır
+
         console.log('Ham post verisi:', postData);
         
         // İçerik alanını kontrol et ve düzenle

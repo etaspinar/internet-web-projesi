@@ -8,11 +8,9 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
-  
-  // Auth Context'ten kullanıcı bilgisini al
+
   const { currentUser, logout } = useAuth();
-  
-  // Scroll durumunu kontrol et
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -28,10 +26,10 @@ const Header = () => {
     };
   }, []);
   
-  // Çıkış işlemi
+
   const handleLogout = () => {
     try {
-      // Önce API isteği gönder
+
       apiLogout()
         .then(() => {
           console.log('Başarılı çıkış yapıldı');
@@ -40,15 +38,14 @@ const Header = () => {
           console.error('Çıkış API isteği başarısız:', error);
         })
         .finally(() => {
-          // Context üzerinden logout fonksiyonunu çağır
+    
           logout();
-          
-          // Ana sayfaya yönlendir
+    
           window.location.href = '/';
         });
     } catch (error) {
       console.error('Çıkış yapılırken hata oluştu:', error);
-      // Hata durumunda da context üzerinden logout çağır
+
       logout();
       window.location.href = '/';
     }
@@ -57,14 +54,11 @@ const Header = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        // Önce yükleniyor durumunu ayarla
         setCategories([]);
         
-        // API isteği gönder
         const response = await getCategories();
         console.log('Kategori API yanıtı:', response);
-        
-        // API yanıtını kontrol et ve uygun şekilde işle
+    
         let categoriesData = [];
         
         if (response && response.data) {
@@ -82,26 +76,24 @@ const Header = () => {
         }
         
         console.log('Header - İşlenen kategoriler:', categoriesData);
-        
-        // Eğer veri hala boşsa, doğrudan API yanıtını kullan
+     
         if (categoriesData.length === 0 && response) {
           console.log('Alternatif veri yapısı deneniyor...');
           categoriesData = response;
         }
         
-        // Verileri state'e kaydet
+  
         setCategories(categoriesData);
       } catch (err) {
         console.error('Kategoriler yüklenirken hata oluştu:', err);
-        // Hata durumunda boş dizi ayarla
+ 
         setCategories([]);
       }
     };
 
-    // Sayfa yüklenirken kategorileri çek
+   
     fetchCategories();
 
-    // Scroll olayını dinle
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setIsScrolled(true);

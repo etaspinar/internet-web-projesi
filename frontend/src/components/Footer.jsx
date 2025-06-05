@@ -12,7 +12,6 @@ const Footer = () => {
   });
 
   useEffect(() => {
-    // Toplam ziyaretçi sayısını al
     const fetchTotalVisitors = async () => {
       try {
         const response = await getVisitorStats();
@@ -32,14 +31,12 @@ const Footer = () => {
     };
 
     fetchTotalVisitors();
-    
-    // WebSocket bağlantısı kur - try/catch bloğu içinde değil
+
     let socket = null;
     let connectionAttempted = false;
-    
-    // Socket.io bağlantısını oluşturmayı dene
+   
     const connectSocket = () => {
-      if (connectionAttempted) return; // Sadece bir kez dene
+      if (connectionAttempted) return; 
       connectionAttempted = true;
       
       try {
@@ -150,7 +147,7 @@ const Footer = () => {
           </div>
           
           <div className="col-md-6 col-lg-3 mb-4">
-            <h5 className="text-uppercase mb-4">Ziyaretçi İstatistikleri</h5>
+            <h5 className="text-uppercase mb-4">Ziyaretçi İstatistiği</h5>
             <div className="visitor-counter">
               <div className="counter-item">
                 <span className="counter-icon">👥</span>
@@ -163,19 +160,7 @@ const Footer = () => {
                   </span>
                   <span className="counter-label">Çevrimiçi Ziyaretçi</span>
                 </div>
-              </div>
-              
-              <div className="counter-separator"></div>
-              
-              <div className="counter-item">
-                <span className="counter-icon">📅</span>
-                <div className="counter-details">
-                  <span className="counter-number">
-                    {stats.loading ? '...' : stats.monthlyVisitors.toLocaleString()}
-                  </span>
-                  <span className="counter-label">Bu Ayki Ziyaretçi</span>
-                </div>
-              </div>
+              </div> 
             </div>
           </div>
         </div>

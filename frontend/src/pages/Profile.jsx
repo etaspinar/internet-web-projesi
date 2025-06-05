@@ -11,8 +11,6 @@ const Profile = () => {
   const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '' });
   const [pwSuccess, setPwSuccess] = useState('');
   const [pwError, setPwError] = useState('');
-  const [activities, setActivities] = useState([]);
-  const [activityType, setActivityType] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,16 +19,6 @@ const Profile = () => {
         const res = await getMyProfile();
         setUser(res.data);
         setEditData({ name: res.data.name, email: res.data.email });
-        // Aktiviteleri de çek
-        const actRes = await fetch('/api/users/activities', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token') || (JSON.parse(localStorage.getItem('user'))?.token)}`,
-          },
-          credentials: 'include',
-        });
-        const actData = await actRes.json();
-        setActivities(actData.posts || actData.comments || []);
-        setActivityType(actData.type);
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -102,6 +90,9 @@ const Profile = () => {
                 </div>
               </div>
               <div className="d-grid gap-2">
+                <button className="btn btn-outline-primary">
+                  <i className="fa-solid fa-key me-2"></i> Şifre Değiştir
+                </button>
                 {user.role === 'admin' && (
                   <a href="/admin" className="btn btn-primary">
                     <i className="fa-solid fa-cogs me-2"></i> Admin Paneline Git
@@ -118,51 +109,59 @@ const Profile = () => {
               <h4 className="mb-0">Profil Bilgileri</h4>
             </div>
             <div className="card-body p-4">
-              {/* Profil bilgileri sadece okunabilir olarak gösteriliyor */}
-              <div className="mb-3">
-                <label htmlFor="name" className="form-label">Ad Soyad</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  value={user.name}
-                  readOnly
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">E-posta Adresi</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  value={user.email}
-                  readOnly
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="role" className="form-label">Kullanıcı Rolü</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="role"
-                  value={user.role === 'admin' ? 'Yönetici' : 'Kullanıcı'}
-                  readOnly
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="createdAt" className="form-label">Kayıt Tarihi</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="createdAt"
-                  value={
-                    user?.createdAt && !isNaN(new Date(user.createdAt).getTime())
-                      ? new Date(user.createdAt).toLocaleDateString('tr-TR')
-                      : 'Belirtilmemiş'
-                  }
-                  readOnly
-                />
-              </div>
+              <form onSubmit={handleProfileUpdate}>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">Ad Soyad</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="name"
+                    name="name"
+                    value={editData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">E-posta Adresi</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    name="email"
+                    value={editData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="role" className="form-label">Kullanıcı Rolü</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="role"
+                    value={user.role === 'admin' ? 'Yönetici' : 'Kullanıcı'}
+                    readOnly
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="createdAt" className="form-label">Kayıt Tarihi</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="createdAt"
+                    value={
+                      user?.createdAt && !isNaN(new Date(user.createdAt).getTime())
+                        ? new Date(user.createdAt).toLocaleDateString('tr-TR')
+                        : 'Belirtilmemiş'
+                    }
+                    readOnly
+                  />
+                </div>
+                {editSuccess && <div className="alert alert-success">{editSuccess}</div>}
+                {editError && <div className="alert alert-danger">{editError}</div>}
+                <button type="submit" className="btn btn-primary">Profili Güncelle</button>
+              </form>
 
               {/* Şifre güncelleme formu */}
               <hr />
@@ -203,60 +202,9 @@ const Profile = () => {
               <h4 className="mb-0">Aktiviteler</h4>
             </div>
             <div className="card-body p-4">
-              {activities.length === 0 ? (
-                <div className="alert alert-info">
-                  <i className="fa-solid fa-info-circle me-2"></i> Henüz aktivite bulunmamaktadır.
-                </div>
-              ) : (
-                <ul className="list-group list-group-flush">
-                  {activityType === 'posts' && activities.map((post) => (
-                    <li className="list-group-item" key={post._id}>
-                      <a href={`/haber/${post.slug}`} target="_blank" rel="noopener noreferrer">
-                        <b>{post.title}</b>
-                      </a>
-                      <span className="text-muted ms-2">({new Date(post.createdAt).toLocaleDateString('tr-TR')})</span>
-                    </li>
-                  ))}
-                  {activityType === 'comments' && activities.map((comment) => (
-                    <li className="list-group-item" key={comment._id}>
-                      <div>
-                        <span className="fw-semibold">Yorum:</span> {comment._editing ? (
-                          <>
-                            <input
-                              type="text"
-                              className="form-control d-inline w-auto mx-2"
-                              value={comment._editValue}
-                              onChange={e => setActivities(acts => acts.map(c => c._id === comment._id ? { ...c, _editValue: e.target.value } : c))}
-                              style={{ maxWidth: 300, display: 'inline-block' }}
-                            />
-                            <button className="btn btn-sm btn-success me-1" onClick={async () => {
-                              try {
-                                await (await import('../services/api')).updateComment(comment._id, comment._editValue);
-                                setActivities(acts => acts.map(c => c._id === comment._id ? { ...c, content: c._editValue, _editing: false } : c));
-                              } catch (err) {
-                                alert('Yorum güncellenemedi: ' + (err.response?.data?.message || 'Hata'));
-                              }
-                            }}>
-                              Kaydet
-                            </button>
-                            <button className="btn btn-sm btn-secondary" onClick={() => setActivities(acts => acts.map(c => c._id === comment._id ? { ...c, _editing: false } : c))}>İptal</button>
-                          </>
-                        ) : (
-                          <>
-                            {comment.content} <button className="btn btn-link btn-sm p-0 ms-2" title="Düzenle" onClick={() => setActivities(acts => acts.map(c => c._id === comment._id ? { ...c, _editing: true, _editValue: c.content } : c))}><i className="fa fa-pen"></i></button>
-                          </>
-                        )}
-                      </div>
-                      <div>
-                        <span className="fw-semibold">Yazı:</span> {comment.post ? (
-                          <a href={`/haber/${comment.post.slug}`} target="_blank" rel="noopener noreferrer">{comment.post.title}</a>
-                        ) : 'Silinmiş yazı'}
-                        <span className="text-muted ms-2">({new Date(comment.createdAt).toLocaleDateString('tr-TR')})</span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <div className="alert alert-info">
+                <i className="fa-solid fa-info-circle me-2"></i> Henüz aktivite bulunmamaktadır.
+              </div>
             </div>
           </div>
         </div>

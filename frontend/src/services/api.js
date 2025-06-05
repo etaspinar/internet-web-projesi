@@ -409,9 +409,4 @@ export const changeMyPassword = async (oldPassword, newPassword) => {
   return api.post('/users/change-password', { oldPassword, newPassword });
 };
 
-// Kullanıcı yorumunu günceller
-export const updateComment = async (commentId, content) => {
-  return api.put(`/users/comments/${commentId}`, { content });
-};
-
 export default api;
